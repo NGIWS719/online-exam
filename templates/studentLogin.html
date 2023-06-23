@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>学生管理界面</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="/static/assets/css/main.css"/>
+</head>
+
+<body>
+<div id="wrapper">
+    <header id="header">
+        <div class="logo">
+            <span class="icon fa-diamond"></span>
+        </div>
+        <div class="content">
+            <div class="inner">
+                <h1>考试系统学生首页</h1>
+                <h3> 欢迎您，{{ student.name }}同学</h3>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#person_info">个人信息</a></li>
+                <li><a href="#exam_info">考试信息</a></li>
+                <li><a href="#score_info">成绩信息</a></li>
+                <li><a href="/">退出</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="main">
+        <article id="person_info">
+            <h2 class="major">个人信息</h2>
+            <div id="home" class="container tab-pane active"><br>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>属性</th>
+                        <th>信息</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>学号</td>
+                        <td>{{ student.id }}</td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td>姓名</td>
+                        <td>{{ student.name }}</td>
+                    </tr>
+                    <tr class="table-success">
+                        <td>性别</td>
+                        <td>{{ student.sex }}</td>
+                    </tr>
+                    <tr class="table-danger">
+                        <td>学院</td>
+                        <td>{{ student.dept }}</td>
+                    </tr>
+
+                    <tr class="table-success">
+                        <td>专业</td>
+                        <td>{{ student.major }}</td>
+                    </tr>
+
+                    <tr class="table-warning">
+                        <td>邮箱地址</td>
+                        <td>{{ student.email }}</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td>出生日期</td>
+                        <td>{{ student.birth }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <button id="exampleBtn" style="display: block;margin: 0 auto;text-align: center;">
+                        修改个人信息
+                </button>
+
+            </div>
+        </article>
+        <article id="score_info">
+            <div id="menu2" class="container tab-pane fade"><br>
+                <h3>成绩信息</h3>
+                <p></p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>科目</th>
+                        <th>成绩</th>
+                        <th>查看试卷</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for grade1 in grade %}
+                    <tr class="table-primary">
+                        <td>{{ student.name }}</td>
+                        <td>{{ grade1.subject }}</td>
+                        <td>{{ grade1.grade }}</td>
+                        <td>
+                            <a id='look_paper_{{ grade1.subject }}'
+                               href="/studentLogin/lookPaper?sid={{ student.id }}&subject={{ grade1.subject }}&grade={{ grade1.grade }}"></a>
+                            <button onclick="$('#look_paper_{{ grade1.subject }}')[0].click()" class="btn btn-primary"
+                                    id="toPaper+{{ grade1.subject }}">查看试卷
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <article id="exam_info">
+            <div id="menu1" class="container tab-pane fade"><br>
+                <h3>考试信息</h3>
+                <p></p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>考试科目</th>
+                        <th>考试时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# 遍历字典 paper #}
+                    {% for paper1 in paper %}
+
+                    <tr class="table-info">
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ paper1.subject }}</td>
+                        <td>{{ paper1.examtime }}</td>
+                        <td>
+                            <!--在html中id是唯一值，所以得跟随其他值进行变化-->
+                            <a id='start_exam_{{ paper1.subject }}'
+                               href="/studentLogin/startExam?sid={{ student.id }}&subject={{ paper1.subject }}"></a>
+                            <button onclick="$('#start_exam_{{ paper1.subject }}')[0].click()" class="btn btn-primary"
+                                    id="toExam+{{ paper1.subject }}">开始考试
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+<!--修改个人信息界面-->
+        <article id="update_info">
+            <h2 class="major">修改个人信息</h2>
+            <div id="my_info" class="container tab-pane active"><br>
+                <form action="update_info" onsubmit="return check_update()" method="POST">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>信息</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="table-primary">
+                            <td>学号</td>
+                            <td><input value="{{ student.id }}" type="text" id="u_id" name="u_id" readonly></td>
+                        </tr>
+                        <tr class="table-success">
+                            <td>姓名</td>
+                            <td><input value="{{ student.name }}" type="text" name="u_username" id="u_username" /></td>
+                        </tr>
+                        <tr class="table-success">
+                            <td>性别</td>
+                            <td><input value="{{ student.sex }}" type="text" name="u_sex" id="u_sex" /></td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td>邮箱地址</td>
+                            <td><input value="{{ student.email }}" type="text" name="u_email" id="u_email" /></td>
+                        </tr>
+                        <tr class="table-active">
+                            <td>出生日期</td>
+                            <td><input value="{{ student.birth }}" type="text" name="u_birth" id="u_birth" placeholder="例：2020-01-01"  /></td>
+                        </tr>
+                        <tr class="table-success">
+                            <td>密码</td>
+                            <td><input type="text" name="u_password" id="u_password" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div align="center">
+                        <input type="submit" value="确认">
+                    </div>
+                </form>
+
+            </div>
+        </article>
+
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <p class="copyright">&copy; 三江学院: <a href="https://www.sju.edu.cn/" style="border-bottom:none">SJU</a>.</p>
+    </footer>
+
+</div>
+
+<!-- BG -->
+<div id="bg"></div>
+
+<!-- Scripts -->
+<script src="../static/assets/js/jquery.min.js"></script>
+<script src="../static/assets/js/skel.min.js"></script>
+<script src="../static/assets/js/util.js"></script>
+<script src="../static/assets/js/main.js"></script>
+
+<script>
+    // 修改信息按钮跳转
+    $('#exampleBtn').click(function() {
+        window.location.href = '#update_info';
+    });
+
+    // 修改检测
+    function check_update() {
+        const $username = $('#u_username');
+        const $password = $('#u_password');
+        const $sex = $('#u_sex');
+        const $email = $('#u_email');
+        const $birth = $('#u_birth');
+        if ($username.val() === "") {
+            $username.focus();
+            return false;
+        }
+        if ($sex.val() !== "男" && $sex.val() !== "女") {
+            alert("请您输入男或者女");
+            $sex.focus();
+            return false;
+        }
+        if ($email.val() === "") {
+            $email.focus();
+            return false;
+        }
+        if ($birth.val() === "") {
+            $birth.focus();
+            return false;
+        }
+        if ($password.val() === "") {
+            $password.focus();
+            return false;
+        }
+        //  所有条件都通过检查
+        return true;
+    }
+</script>
+
+</body>
+
+</html>

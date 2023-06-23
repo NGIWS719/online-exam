@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>在线考试系统</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="static/assets/css/main.css" />
+    <script src="static/assets/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+            <div>
+                <a href="http://120.26.93.208:8000/admin" style="border-bottom:none;" >后台管理员登录</a>
+            </div>
+        <!-- Header -->
+        <header id="header">
+            <div class="logo">
+                <span class="icon fa-diamond"></span>
+            </div>
+            <div class="content">
+                <div class="inner">
+                    <h1>在线考试系统</h1>
+                    <p>
+                        三江学院在线考试系统三江学院在线考试系统三江学院在线考试系统三江学院在线考试系统三江学院在线考试系统<br />
+                        三江学院在线考试系统三江学院在线考试系统三江学院在线考试系统三江学院在线考试系统
+                    </p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#is_login">登录</a></li>
+                    <li><a href="#is_register">注册</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div id="main">
+            <article id="is_login">
+                <h2 class="major">登录</h2>
+                <div style="display:flex; justify-content:center; align-items:center;">
+                    <form action="" onsubmit="return check_login()" method="POST" style="display: flex; flex-direction: column;">
+
+                        <div class="field half first" style="margin-left: 160px">
+                            <label for="name">学工号：</label>
+                            <input type="text" name="username" id="username" />
+                        </div>
+                        <div class="field half first" style="margin-left: 160px">
+                            <label for="password">密&nbsp;码：</label>
+                            <input type="password" name="password" id="password" />
+                        </div>
+                        <div class="field half first" style="margin-left: 160px">
+                            <label for="user_type">用户种类：</label>
+                            <select name="user_type" id="user_type">
+                                    <option value="1">学生</option>
+                                    <option value="2">教师</option>
+                            </select>
+                        </div>
+                        <div style="margin-left: 160px">
+                            <label for="code">验证码：</label>
+                            <div class="field half first" style="display: flex; align-items: center;">
+                                <input type="text" style="width: 107px;" id="code" name="code" placeholder="验证码" value="">
+                                <div style="width: 200px;"></div>
+                                <div style="width: 200px;height: 47px;">
+                                    <img id="code_img" src=""
+                                         style="width: 101px;height: 44px;" alt="">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="field">&nbsp;</div>
+                        <div align="center">
+                            <input onclick="login_i_p()" type="submit" value="登录">
+                        </div>
+                    </form>
+                </div>
+            </article>
+
+            <!--register page-->
+            <article id="is_register">
+                <h2 class="major">注册</h2>
+                <div style="display:flex; justify-content:center; align-items:center;">
+                <form action="studentLogin/register" onsubmit="return check_register()" method="POST"  style="display: flex; flex-direction: column;">
+                    <div class="field half first">
+                        <label for="u_id">学工号：</label>
+                        <input style="width: 327.5px" type="text" name="userid" id="userid" />
+                    </div>
+                    <div class="field half first">
+                        <label for="r_name">用户名：</label>
+                        <input style="width: 327.5px" type="text" name="r_username" id="r_username" />
+                    </div>
+                    <div class="field half first">
+                        <label for="r_password">密&nbsp;码：</label>
+                        <input style="width: 327.5px" type="password" name="r_password" id="r_password" />
+                    </div>
+                    <div class="field half first">
+                        <label for="r_user_type">用户种类：</label>
+                        <select style="width: 327.5px" name="r_user_type" id="r_user_type">
+                                <option value="1">学生</option>
+                                <option value="2">教师</option>
+                        </select>
+                    </div>
+                    <div class="field">&nbsp;</div>
+                    <div align="center">
+                        <input onclick="register_i_p()" style="width: 148px" type="submit" value="注册">
+                    </div>
+                </form>
+                </div>
+            </article>
+
+        </div>
+
+        <script>
+            $(function(){
+                $img = $("#code_img")
+                    $.get(
+                        '/get_code',
+                        {},
+                        function(data){
+                            //console.log(data)
+                            $img.attr("src","data:image/png;base64,"+data);
+                        }
+                    )
+                }
+            )
+
+            $img = $("#code_img")
+            $img.bind('click',function(){
+                $img = $("#code_img")
+                $.get(
+                    '/get_code',
+                    {},
+                    function(data){
+                        //console.log(data)
+                        $img.attr("src","data:image/png;base64,"+data);
+                    }
+                )
+            })
+        </script>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">&copy; 三江学院: <a href="https://www.sju.edu.cn/" style="border-bottom:none">SJU</a>.</p>
+        </footer>
+
+    </div>
+
+    <!-- BG -->
+    <div id="bg"></div>
+
+    <!-- Scripts -->
+    <script src="static/assets/js/skel.min.js"></script>
+    <script src="static/assets/js/util.js"></script>
+    <script src="static/assets/js/main.js"></script>
+    <script>
+        function check_register() {
+            $userid = $('#userid');
+            $username = $('#r_username');
+            $password = $('#r_password');
+            if ($userid.val() == "") {
+                $userid.focus();
+                return false;
+            } else if ($username.val() == "") {
+                $username.focus();
+                return false;
+            } else if ($password.val() == "") {
+                $password.focus();
+                return false;
+            }
+            return true;
+        }
+
+
+        $("#code_img").bind('click',function(){
+        //console.log('1');
+            $.ajax({
+                <!--url:'static/verify_code_imgs/{{today_str}}/{{filename}}.png',-->
+                data:{},
+                dataType:'',
+                type: "GET",
+                success:function(data){
+
+                    }
+            })
+        })
+
+
+    function check_login() {
+        $username = $('#username');
+        $password = $('#password');
+        $code = $('#code');
+            // alert($username.val());
+        if ($username.val() == "") {
+            $username.focus();
+            return false;
+        } else if ($password.val() == "") {
+            $password.focus();
+            return false;
+        } else if ($code.val() == "") {
+            $code.focus();
+            return false;
+        }
+        if ($("#user_type").val() == "1") {
+            $("form").attr("action", "studentLogin/index");
+        } else if ($("#user_type").val() == "2") {
+            $("form").attr("action", "teacherLogin/index");
+        }
+        return true;
+    }
+
+
+
+    // 正则校验账号密码
+    function login_i_p() {
+        $username = $('#username');
+        $password = $('#password');
+        if (!(/\b\d{11}\b|\b\d{4}\b/.test($username.val()))) {
+            alert("学号或工号不合法");
+        }
+        if (!(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test($password.val()))) {
+            alert("请输入至少6位密码,需要包含数字和字母");
+        }
+      }
+
+
+      function register_i_p() {
+        $userid = $('#userid');
+        $password = $('#r_password');
+
+        if ($("#r_user_type").val() == "1") {
+            if (!(/^\d{11}$/.test($userid.val()))) {
+            alert("学号不合法");
+        }
+        }
+        if ($("#r_user_type").val() == "2") {
+           if (!(/^\d{4}$/.test($userid.val()))) {
+            alert("工号不合法");
+        }
+        }
+
+        //if (!(/^\d{11}$/.test($userid.val()))) {
+          //  alert("学工号不合法");
+        //}
+        if (!(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test($password.val()))) {
+            alert("请输入至少6位密码,需要包含数字和字母");
+        }
+      }
+
+    </script>
+
+</body>
+
+</html>
